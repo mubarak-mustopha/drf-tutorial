@@ -10,8 +10,8 @@ router.register("categorys", views.CategoryViewSet)
 urlpatterns = router.urls
 
 # urlpatterns = [
-#     path("products/", views.ProductsView.as_view()),
-#     path("products/<uuid:pk>", views.ProductView.as_view()),
+#     path("products/", views.ProductsAPIView.as_view()),
+#     path("products/<uuid:pk>/", views.ProductAPIView.as_view()),
 #     path("categorys", views.CategorysView.as_view()),
 #     path("categorys/<uuid:pk>", views.CategoryView.as_view()),
 # ]

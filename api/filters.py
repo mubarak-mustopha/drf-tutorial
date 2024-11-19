@@ -9,6 +9,5 @@ class ProductFilterSet(FilterSet):
         fields = {
             "category": ["exact"],
             "top_deal": ["exact"],
-            "description": ["icontains"],
             "old_price": ["lt", "gt"],
         }
