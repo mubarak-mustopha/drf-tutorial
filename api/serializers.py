@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from storeapp.models import Product, Category
 
+from rest_framework.serializers import StringRelatedField
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +27,5 @@ class ProductSerializer(serializers.ModelSerializer):
             "old_price",
             "price",
         ]
+
+    category = CategorySerializer()

@@ -7,4 +7,4 @@ from storeapp.models import Product
 class ProductFilterSet(FilterSet):
     class Meta:
         model = Product
-        fields = {"name": ["iexact"], "old_price": ["lt", "gt"]}
+        fields = {"name": ["iexact"], "old_price": ["lt", "gt"], "category": ["exact"]}
