@@ -25,3 +25,5 @@ class ProductSerializer(serializers.ModelSerializer):
             "old_price",
             "price",
         ]
+
+    category = CategorySerializer()
