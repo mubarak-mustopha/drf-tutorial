@@ -10,8 +10,8 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.viewsets import ModelViewSet
 
 from .filters import ProductFilterSet
-from .serializers import ProductSerializer, CategorySerializer
-from storeapp.models import Product, Category
+from .serializers import ProductSerializer, CategorySerializer, ReviewSerializer
+from storeapp.models import Product, Category, Review
 
 
 # Create your views here.
@@ -30,3 +30,13 @@ class ProductViewSet(ModelViewSet):
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class ReviewVeiwSet(ModelViewSet):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        return Review.objects.filter(product_id=self.kwargs["product_pk"])
+
+    def get_serializer_context(self):
+        return {"product_id": self.kwargs["product_pk"]}
