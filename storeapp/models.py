@@ -51,6 +51,15 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class Review(models.Model):
+    product = models.ForeignKey("Product", on_delete=models.CASCADE, related_name = "reviews")
+    date_created = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(default="description")
+    name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.description        
+
 class Cart(models.Model):
     owner = models.ForeignKey(Customer, on_delete=models.CASCADE, null = True, blank=True)
     cart_id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
