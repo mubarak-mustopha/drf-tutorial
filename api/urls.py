@@ -7,6 +7,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register("products", views.ProductViewSet)
 router.register("categorys", views.CategoryViewSet)
+router.register("carts", views.CartViewSet)
 
 
 # products/{product_pk}/reviews/[{reviews_pk}]
