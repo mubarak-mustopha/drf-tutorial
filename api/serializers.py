@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from storeapp.models import Product, Category, Review
+from storeapp.models import *
 
 from rest_framework.serializers import StringRelatedField
 
@@ -41,3 +41,29 @@ class ReviewSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["product_id"] = self.context["product_id"]
         return super().create(validated_data)
+
+
+class SimpleProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["id", "name", "price"]
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    product = SimpleProductSerializer()
+
+    class Meta:
+        model = Cartitems
+        fields = ["id", "product", "quantity", "subTotal"]
+
+
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+    total = serializers.SerializerMethodField(method_name="get_total")
+
+    class Meta:
+        model = Cart
+        fields = ["cart_id", "items", "total"]
+
+    def get_total(self, cart: Cart):
+        return cart.cart_total
