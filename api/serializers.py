@@ -41,11 +41,34 @@ class ReviewSerializer(serializers.ModelSerializer):
         return Review.objects.create(product_id=product_id, **validated_data)
 
 
+class SimpleProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["id", "name", "price"]
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    product = SimpleProductSerializer()
+    subtotal = serializers.SerializerMethodField(method_name="get_subtotal")
+
+    class Meta:
+        model = Cartitems
+        fields = ["id", "product", "quantity", "subtotal"]
+
+    def get_subtotal(self, cartitem: Cartitems):
+        return cartitem.quantity * cartitem.product.price
+
+
 class CartSerializer(serializers.ModelSerializer):
     cart_id = serializers.UUIDField(read_only=True)
+    items = CartItemSerializer(many=True)
+    total = serializers.SerializerMethodField(method_name="get_total")
 
     class Meta:
         model = Cart
-        fields = ["cart_id", "owner"]
+        fields = ["cart_id", "owner", "items", "total"]
 
     # owner = serializers.StringRelatedField()
+    def get_total(self, cart: Cart):
+        items = cart.items.all()
+        return sum([item.quantity * item.product.price for item in items])
