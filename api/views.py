@@ -30,6 +30,7 @@ class ProductViewSet(ModelViewSet):
     search_fields = ["name", "description"]
     ordering_fields = ["name", "old_price"]
     pagination_class = PageNumberPagination
+    page_size = 3
 
 
 class CategoryViewSet(ModelViewSet):
@@ -52,3 +53,18 @@ class CartViewSet(
 ):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+
+
+class CartItemViewSet(ModelViewSet):
+    def get_queryset(self):
+        return Cartitems.objects.filter(cart_id=self.kwargs["cart_pk"])
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return AddCartItemSerializer
+        return CartItemSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["cart_id"] = self.kwargs["cart_pk"]
+        return context

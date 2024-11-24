@@ -44,7 +44,7 @@ class Product(models.Model):
     id = models.UUIDField(
         default=uuid.uuid4, editable=False, primary_key=True, unique=True
     )
-    inventory = models.IntegerField(default=5)
+    inventory = models.PositiveSmallIntegerField(default=5)
     top_deal = models.BooleanField(default=False)
     flash_sales = models.BooleanField(default=False)
 
@@ -116,7 +116,7 @@ class Cartitems(models.Model):
         blank=True,
         null=True,
     )
-    quantity = models.IntegerField(default=0)
+    quantity = models.PositiveSmallIntegerField(default=0)
 
     @property
     def subTotal(self):
