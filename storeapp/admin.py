@@ -11,6 +11,7 @@ class ReviewAdmin(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     inlines = [ReviewAdmin]
+    list_display = ["id", "name"]
 
 
 class CategoryAdmin(admin.ModelAdmin):

@@ -44,7 +44,7 @@ class Product(models.Model):
     id = models.UUIDField(
         default=uuid.uuid4, editable=False, primary_key=True, unique=True
     )
-    inventory = models.IntegerField(default=5)
+    inventory = models.PositiveSmallIntegerField(default=5)
     top_deal = models.BooleanField(default=False)
     flash_sales = models.BooleanField(default=False)
 
@@ -86,7 +86,7 @@ class Cart(models.Model):
     completed = models.BooleanField(default=False)
     session_id = models.CharField(max_length=100)
 
-    @property
+    @property 
     def num_of_items(self):
         cartitems = self.cartitems_set.all()
         qtysum = sum([qty.quantity for qty in cartitems])
@@ -94,7 +94,7 @@ class Cart(models.Model):
 
     @property
     def cart_total(self):
-        cartitems = self.cartitems_set.all()
+        cartitems = self.items.all()
         qtysum = sum([qty.subTotal for qty in cartitems])
         return qtysum
 
@@ -112,7 +112,7 @@ class Cartitems(models.Model):
         blank=True,
         null=True,
     )
-    quantity = models.IntegerField(default=0)
+    quantity = models.PositiveSmallIntegerField(default=0)
 
     @property
     def subTotal(self):

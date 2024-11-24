@@ -170,7 +170,7 @@ AUTH_USER_MODEL = "core.User"
 # AWS_ACCESS_KEY_ID  = os.environ.get('AWS_ACCESS_KEY')
 # AWS_SECRET_ACCESS_KEY =  os.environ.get('AWS_SECRET_KEY')
 # AWS_STORAGE_BUCKET_NAME = 'shopit-bucket'
-REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 3,
-}
+# REST_FRAMEWORK = {
+#     # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+#     "PAGE_SIZE": 3,
+# }
