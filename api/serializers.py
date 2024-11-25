@@ -14,7 +14,25 @@ class CategorySerializer(serializers.ModelSerializer):
         ]
 
 
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ["id", "product", "image"]
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True, read_only=True)
+    uploaded_images = serializers.ListField(
+        child=serializers.ImageField(
+            max_length=100000,
+            allow_empty_file=True,
+            use_url=True,
+        ),
+        allow_empty=True,
+        required=False,
+        write_only=True,
+    )
+
     class Meta:
         model = Product
         fields = [
@@ -26,9 +44,18 @@ class ProductSerializer(serializers.ModelSerializer):
             "inventory",
             "old_price",
             "price",
+            "images",
+            "uploaded_images",
         ]
 
-    category = CategorySerializer()
+    category = serializers.StringRelatedField()
+
+    def create(self, validated_data):
+        uploaded_images = validated_data.get("uploaded_images",[])
+        product = Product.objects.create(**validated_data)
+        for image in uploaded_images:
+            ProductImage.objects.create(product=product, image=image)
+        return product
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -72,7 +99,7 @@ class AddCartItemSerializer(serializers.ModelSerializer):
     def validate_quantity(self, value):
         if value < 0:
             raise serializers.ValidationError("Can't pass a negative value as quantity")
-        return value    
+        return value
 
     def save(self, **kwargs):
         cart_id = self.context["cart_id"]
@@ -89,6 +116,12 @@ class AddCartItemSerializer(serializers.ModelSerializer):
         cartitem.save()
         self.instance = cartitem
         return self.instance
+
+
+class UpdateCartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cartitems
+        fields = ["quantity"]
 
 
 class CartSerializer(serializers.ModelSerializer):
