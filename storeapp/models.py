@@ -40,7 +40,7 @@ class Product(models.Model):
         null=True,
         related_name="products",
     )
-    slug = models.SlugField(default=None)
+    slug = models.SlugField(default="", blank=True)
     id = models.UUIDField(
         default=uuid.uuid4, editable=False, primary_key=True, unique=True
     )
@@ -67,6 +67,13 @@ class Product(models.Model):
         return self.name
 
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images"
+    )
+    image = models.ImageField(upload_to="img", default="", blank=True)
+
+
 class Review(models.Model):
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="reviews"
@@ -86,7 +93,7 @@ class Cart(models.Model):
     completed = models.BooleanField(default=False)
     session_id = models.CharField(max_length=100)
 
-    @property 
+    @property
     def num_of_items(self):
         cartitems = self.cartitems_set.all()
         qtysum = sum([qty.quantity for qty in cartitems])

@@ -12,7 +12,21 @@ class CategorySerializer(serializers.ModelSerializer):
         ]
 
 
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ["id", "product", "image"]
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True, read_only=True)
+    uploaded_images = serializers.ListField(
+        child=serializers.ImageField(
+            max_length=1000000, allow_empty_file=False, use_url=False
+        ),
+        write_only=True,
+    )
+
     class Meta:
         model = Product
         fields = [
@@ -20,13 +34,24 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "category",
-            "slug",
             "inventory",
             "old_price",
             "price",
+            "images",
+            "uploaded_images",
         ]
 
-    category = CategorySerializer()
+    # category = CategorySerializer()
+    category = serializers.StringRelatedField(read_only=True)
+
+    def create(self, validated_data):
+        uploaded_images = validated_data["uploaded_images"]
+        print(f"**\n{uploaded_images}\n**")
+        product = Product.objects.create(**validated_data)
+        for image in uploaded_images:
+            print(f"**\n{image}\n**")
+            ProductImage.objects.create(product=product, image=image)
+        return product
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -92,10 +117,12 @@ class AddCartItemSerializer(serializers.ModelSerializer):
         self.instance = cartitem
         return self.instance
 
+
 class UpdateCartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cartitems
         fields = ["quantity"]
+
 
 class CartSerializer(serializers.ModelSerializer):
     cart_id = serializers.UUIDField(read_only=True)

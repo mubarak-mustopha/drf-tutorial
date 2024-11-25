@@ -8,9 +8,14 @@ class ReviewAdmin(admin.TabularInline):
     extra = 3
 
 
+class ProductImageAdmin(admin.TabularInline):
+    model = ProductImage
+    extra = 3
+
+
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    inlines = [ReviewAdmin]
+    inlines = [ProductImageAdmin, ReviewAdmin]
     list_display = ["id", "name"]
 
 

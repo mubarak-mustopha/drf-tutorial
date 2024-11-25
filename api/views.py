@@ -21,6 +21,10 @@ from storeapp.models import *
 
 # Create your views here.
 # MODELVIEWSETS
+class ProductPaginator(PageNumberPagination):
+    page_size = 3
+
+
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -29,8 +33,7 @@ class ProductViewSet(ModelViewSet):
     filterset_class = ProductFilterSet
     search_fields = ["name", "description"]
     ordering_fields = ["old_price"]
-    pagination_class = PageNumberPagination
-    page_size = 3
+    # pagination_class = ProductPaginator
 
     def get_queryset(self):
         return super().get_queryset()
