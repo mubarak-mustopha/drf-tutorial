@@ -15,7 +15,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,5 +24,7 @@ urlpatterns = [
     path("", include("storeapp.urls")),
     path("user/", include("UserProfile.urls")),
     path("api/", include("api.urls")),
+    re_path(r"^auth/", include("djoser.urls")),
+    re_path(r"^auth/", include("djoser.urls.jwt")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
