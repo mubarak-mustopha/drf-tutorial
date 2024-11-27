@@ -51,7 +51,7 @@ class ProductSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
 
     def create(self, validated_data):
-        uploaded_images = validated_data.get("uploaded_images",[])
+        uploaded_images = validated_data.pop("uploaded_images", [])
         product = Product.objects.create(**validated_data)
         for image in uploaded_images:
             ProductImage.objects.create(product=product, image=image)

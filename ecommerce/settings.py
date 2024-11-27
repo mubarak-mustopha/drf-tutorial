@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "api",
     "rest_framework",
     "django_filters",
+    "djoser",
 ]
 
 MIDDLEWARE = [
@@ -170,7 +171,26 @@ AUTH_USER_MODEL = "core.User"
 # AWS_ACCESS_KEY_ID  = os.environ.get('AWS_ACCESS_KEY')
 # AWS_SECRET_ACCESS_KEY =  os.environ.get('AWS_SECRET_KEY')
 # AWS_STORAGE_BUCKET_NAME = 'shopit-bucket'
-# REST_FRAMEWORK = {
-#     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-#     "PAGE_SIZE": 3,
-# }
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    #     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    #     "PAGE_SIZE": 3,
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("JWT",),
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMjc0Mjc0MiwianRpIjoiM2I1M2VkMzYwNDI0NGQ5OThjZjE5YmYzMWQ5YTM4YzYiLCJ1c2VyX2lkIjozfQ.L3bjVjRX8yU3YfIDtuApmNlXykbNg2UjghPE4x0Acek",
+# "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMyNjU2NjQyLCJqdGkiOiIzZjMzNTI3YmZlMGY0MmY5ODQyNTNhNDZkNDg3NjczYiIsInVzZXJfaWQiOjN9.PwTm78aSzmQUIF2p2sr72JlhY1kZqwr4qmUJLIFSdZk"
+DJOSER = {
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True,
+    "SERIALIZERS": {
+        "user_create": "core.serializers.CustomUserCreateSerializer",
+    },
+}
